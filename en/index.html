@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // 按系统语言选版本：中文系统看中文，其他看英文；用户在顶栏切过就照他选的
+  (function () {
+    var pref = null;
+    try { pref = localStorage.getItem('aibook.lang'); } catch (e) {}
+    var sys = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+    var want = pref || (/^zh/i.test(sys) ? 'zh' : 'en');
+    if (want !== 'en') location.replace('../' + location.hash);
+  })();
+</script>
+<title>The AI Encyclopedia — learn AI hands-on, in English and Chinese</title>
+<meta name="description" content="An iPhone and iPad app: a three-volume AI textbook in 72 chapters, in English and Chinese paragraph by paragraph, with 191 figures, 69 interactive labs, 360 drills and 12 branching scenarios. The preface, appendices and Parts 1–2 are free; unlock the whole book with a one-time purchase.">
+<link rel="canonical" href="https://ai.myheartand.me/en/">
+<link rel="alternate" hreflang="zh-Hans" href="https://ai.myheartand.me/">
+<link rel="alternate" hreflang="en" href="https://ai.myheartand.me/en/">
+<link rel="alternate" hreflang="x-default" href="https://ai.myheartand.me/">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F7F4ED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111417" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The AI Encyclopedia">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://ai.myheartand.me/en/">
+<meta property="og:title" content="The AI Encyclopedia — learn AI hands-on, in English and Chinese">
+<meta property="og:description" content="An iPhone and iPad app: a three-volume AI textbook in 72 chapters, in English and Chinese paragraph by paragraph, with 191 figures, 69 interactive labs, 360 drills and 12 branching scenarios. The preface, appendices and Parts 1–2 are free; unlock the whole book with a one-time purchase.">
+<meta property="og:image" content="https://ai.myheartand.me/img/og-en.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    color-scheme: light dark;
+    --paper: #F7F4ED; --surface: #FFFDF8; --sunken: #EFEADF; --hair: #E2DBCD;
+    --ink: #1D2733; --ink2: #5A6472; --ink3: #8C939C; --on-accent: #FFFFFF;
+    --accent: #287A7E; --accent-deep: #1E6164; --accent-soft: #DCEDEC; --en-bar: #9CCBC8;
+    --copper: #B5683A; --copper-soft: #F5E5D8; --navy: #1F3A5F; --navy-soft: #E1E8F0;
+    --bezel: #141A20; --shadow: 31, 58, 95; --art-opacity: 1; --wash-opacity: .95;
+    --serif: Georgia, "Times New Roman", "Songti SC", "Noto Serif SC", serif;
+    --songti: "Songti SC", "STSong", "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+    --latin: Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+    --wrap: 1120px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #111417; --surface: #1B2025; --sunken: #232930; --hair: #2D343B;
+      --ink: #ECE7DC; --ink2: #A7ADB5; --ink3: #737A83; --on-accent: #111417;
+      --accent: #5FB8B4; --accent-deep: #7FCAC6; --accent-soft: #1C3335; --en-bar: #2F6062;
+      --copper: #E29A6A; --copper-soft: #3A2A21; --navy: #8DAFD8; --navy-soft: #1D2836;
+      --bezel: #050608; --shadow: 0, 0, 0; --art-opacity: .88; --wash-opacity: .3;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.75 var(--sans); overflow-x: hidden; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  .alt { font-weight: 400; color: var(--ink2); font-style: normal; }
+  .alt[lang="en"] { font-family: var(--latin); font-style: italic; }
+  .alt[lang="zh-Hans"] { font-family: var(--songti); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.25; margin: 0; letter-spacing: 0.01em; text-wrap: balance; }
+  p, li { text-wrap: pretty; }
+  h2 { font-size: clamp(28px, 4.2vw, 42px); }
+  h2 .alt, h3 .alt { display: block; font-size: 0.48em; margin-top: 8px; letter-spacing: 0; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+  /* 顶栏 */
+  .bar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 86%, transparent);
+         backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+         border-bottom: 0.5px solid transparent; transition: border-color .2s; }
+  .bar.scrolled { border-bottom-color: var(--hair); }
+  .bar .wrap { display: flex; align-items: center; gap: 18px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-family: var(--serif); font-weight: 700; font-size: 18px; white-space: nowrap; }
+  .brand img { width: 30px; height: 30px; border-radius: 7px; }
+  .bar nav { display: flex; gap: 22px; margin-left: auto; font-size: 15px; }
+  .bar nav a { color: var(--ink2); text-decoration: none; white-space: nowrap; }
+  .bar nav a:hover { color: var(--ink); }
+  .lang { font-size: 14px; color: var(--ink); text-decoration: none; padding: 5px 10px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--hair); white-space: nowrap; }
+  .lang:hover { background: var(--surface); }
+  @media (max-width: 900px) { .bar nav { display: none; } .bar .lang { margin-left: auto; } }
+  @media (max-width: 400px) { .bar .wrap { gap: 10px; } }
+  @media (max-width: 440px) { .brand span { display: none; } }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 13px 24px; font-weight: 600; font-size: 16px;
+         text-decoration: none; white-space: nowrap; transition: transform .15s, background .15s; }
+  a.btn:active { transform: scale(0.97); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 6px 18px -8px rgba(40, 122, 126, .6); }
+  a.btn-primary:hover { background: var(--accent-deep); }
+  .btn-primary.soon { background: var(--ink); color: var(--paper); box-shadow: none; cursor: default; }
+  .btn-ghost { color: var(--ink); background: transparent; box-shadow: inset 0 0 0 1px var(--hair); }
+  .btn-ghost:hover { background: var(--surface); }
+  .bar .btn { padding: 8px 16px; font-size: 14px; }
+
+  /* 首屏 */
+  .hero { padding: 40px 0 24px; overflow: hidden; }
+  .hero .wrap { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 900px) { .hero { padding: 72px 0 40px; } .hero .wrap { grid-template-columns: 1.08fr 0.92fr; gap: 40px; } }
+  .eyebrow { display: inline-flex; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+  .eyebrow span { background: var(--accent-soft); padding: 3px 10px; border-radius: 99px; }
+  .hero h1 { font-size: clamp(40px, 5.4vw, 64px); letter-spacing: 0; }
+  .hero .sub { font-size: clamp(19px, 2.4vw, 26px); margin: 8px 0 0; }
+  .hero .tagline { font-family: var(--serif); font-size: clamp(17px, 2vw, 20px); color: var(--ink2); margin: 14px 0 0; padding-top: 14px; border-top: 0.5px solid var(--hair); max-width: 28em; }
+  .lead { font-size: clamp(18px, 2vw, 21px); line-height: 1.8; margin: 22px 0 0; max-width: 32em; }
+  .lead .q { font-family: var(--serif); color: var(--ink); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0 0; }
+  .fine { margin: 16px 0 0; font-size: 14px; color: var(--ink2); max-width: 36em; }
+  .fine b { color: var(--ink); font-weight: 600; }
+  .hero-visual { position: relative; display: grid; place-items: center; min-height: 540px; }
+  .hero-visual .wash { position: absolute; inset: -4% -18% -4% -18%; background: url(../img/hero-home.jpg) center / cover no-repeat;
+                       -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent); mask-image: radial-gradient(closest-side, #000 58%, transparent);
+                       opacity: var(--wash-opacity); }
+  .hero-visual .phone { width: min(292px, 66vw); position: relative; transform: rotate(2.5deg); }
+  .hero-visual.art-only { min-height: 0; }
+  @media (max-width: 899px) { .hero-visual { min-height: 0; padding: 12px 0 8px; } }
+
+  .phone { margin: 0; aspect-ratio: 600 / 1304; border-radius: 15% / 7%; padding: 3.2%; background: var(--bezel);
+           box-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 30px 60px -24px rgba(var(--shadow), .45), 0 12px 24px -12px rgba(var(--shadow), .25); }
+  .phone img { width: 100%; height: 100%; object-fit: cover; border-radius: 12.4% / 5.8%; }
+  .art { margin: 0; border-radius: 24px; overflow: hidden; box-shadow: 0 0 0 0.5px var(--hair), 0 30px 60px -36px rgba(var(--shadow), .4); }
+  .art img { width: 100%; opacity: var(--art-opacity); }
+
+  /* 数字 */
+  .stats ul { list-style: none; margin: 0; padding: 26px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 12px;
+              border-top: 0.5px solid var(--hair); border-bottom: 0.5px solid var(--hair); }
+  @media (min-width: 900px) { .stats ul { grid-template-columns: repeat(6, 1fr); } }
+  .stats li { text-align: center; display: grid; gap: 2px; align-content: start; }
+  .stats b { font-family: var(--serif); font-size: clamp(30px, 4vw, 40px); color: var(--accent); line-height: 1.1; font-variant-numeric: lining-nums; }
+  .stats span { font-size: 14px; line-height: 1.4; }
+  .stats .alt { font-size: 12px; }
+
+  /* 读 · 做 · 练 */
+  .feature { padding: 88px 0 0; }
+  .feature .wrap { display: grid; gap: 36px; align-items: center; }
+  @media (min-width: 900px) {
+    .feature .wrap { grid-template-columns: 1fr 1fr; gap: 64px; }
+    .feature.flip .copy { order: 2; }
+  }
+  .mark { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--accent-soft);
+          color: var(--accent); font-family: var(--songti); font-size: 30px; font-weight: 700; margin-bottom: 18px; }
+  .copy > p { color: var(--ink2); margin: 18px 0 0; max-width: 30em; }
+  .ticks { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 10px; }
+  .ticks li { display: flex; gap: 10px; align-items: flex-start; }
+  .ticks svg { width: 18px; height: 18px; flex: none; margin-top: 5px; color: var(--accent); }
+  .feature.copper .mark { background: var(--copper-soft); color: var(--copper); }
+  .feature.copper .ticks svg { color: var(--copper); }
+  .feature.navy .mark { background: var(--navy-soft); color: var(--navy); }
+  .feature.navy .ticks svg { color: var(--navy); }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 6%; max-width: 560px; margin: 0 auto; width: 100%; padding: 0 4% 12%; }
+  .duo .phone:last-child { transform: translateY(12%); }
+  .solo { width: min(292px, 66vw); margin: 0 auto; }
+
+  /* 试读一段 */
+  .sample { padding: 96px 0 0; }
+  .section-head { text-align: center; max-width: 40em; margin: 0 auto 36px; }
+  .section-head p { color: var(--ink2); margin: 16px 0 0; }
+  .page { max-width: 760px; margin: 0 auto; background: var(--surface); border-radius: 24px; padding: clamp(22px, 5vw, 52px);
+          box-shadow: 0 0 0 0.5px var(--hair), 0 30px 60px -40px rgba(var(--shadow), .35); }
+  .page-head { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 18px; font-size: 13px; color: var(--ink3); }
+  .page-head .latin { font-family: var(--latin); font-style: italic; }
+  .page h3 { font-size: clamp(22px, 3vw, 28px); }
+  .page h3 .alt { font-size: 16px; }
+  .sec-num { color: var(--accent); margin-right: 12px; font-variant-numeric: lining-nums; }
+  .pair { margin: 22px 0 0; }
+  .pair p, .pair ul, .pair ol, .pair blockquote { margin: 0; }
+  .pair ul, .pair ol { padding-left: 1.3em; }
+  .pair li + li { margin-top: 4px; }
+  .pair blockquote { background: var(--sunken); border-radius: 14px; padding: 12px 16px; }
+  .pair .first { font-family: var(--serif); font-size: 18.5px; line-height: 1.85; }
+  .pair .first[lang="en"] { font-size: 18px; line-height: 1.7; }
+  .pair .second { margin-top: 10px; font-size: 16px; line-height: 1.7; color: var(--ink2); border-left: 3px solid var(--en-bar); padding-left: 14px; }
+  .pair .second[lang="en"] { font-family: var(--latin); }
+  .pair .second[lang="zh-Hans"] { font-family: var(--songti); }
+  .pair .second blockquote { background: none; padding: 0; }
+  .term { color: var(--accent); border-bottom: 1px dotted currentColor; }
+  .figure { margin: 30px 0 0; }
+  .figure-img { border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 0.5px var(--hair); }
+  .figure-img img { opacity: var(--art-opacity); }
+  .figure figcaption { margin-top: 10px; font-size: 13.5px; line-height: 1.6; color: var(--ink2); }
+  .figure figcaption .alt { display: block; margin-top: 4px; color: var(--ink3); }
+  .lab-note { max-width: 760px; margin: 16px auto 0; display: flex; gap: 14px; align-items: flex-start; padding: 16px 20px;
+              background: var(--accent-soft); border-radius: 18px; font-size: 15px; }
+  .lab-note b { color: var(--accent); }
+  .lab-note svg { width: 22px; height: 22px; flex: none; margin-top: 2px; color: var(--accent); }
+
+  /* 游戏厅 */
+  .arcade { padding: 96px 0 0; }
+  .arcade .card { background: var(--surface); border-radius: 28px; box-shadow: 0 0 0 0.5px var(--hair); padding: clamp(24px, 5vw, 56px);
+                  display: grid; gap: 32px; align-items: center; overflow: hidden; }
+  @media (min-width: 900px) { .arcade .card { grid-template-columns: 1.15fr 0.85fr; } }
+  .arcade .phone { width: min(270px, 62vw); margin: 0 auto -18%; }
+  .arcade .art { margin: 0 auto; max-width: 420px; }
+  .arcade p { color: var(--ink2); margin: 16px 0 0; }
+  .arcade h2 { margin-top: 16px; }
+  .arcade .note { font-size: 14px; }
+  .pill { display: inline-block; font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--copper-soft); color: var(--copper); }
+
+  /* 目录 */
+  .toc { padding: 104px 0 0; }
+  .legend { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--ink2); margin: 14px 0 0; }
+  .volume { margin-top: 48px; }
+  .vol-head { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; margin: 0 0 20px; }
+  .vol-head img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 16px; box-shadow: 0 0 0 0.5px var(--hair); opacity: var(--art-opacity); }
+  .vol-head h3 { font-size: clamp(24px, 3vw, 30px); }
+  .vol-head h3 .alt { font-size: 15px; }
+  .vol-head .range { margin: 8px 0 0; font-size: 14px; color: var(--ink3); }
+  @media (max-width: 600px) { .vol-head { grid-template-columns: 112px 1fr; gap: 16px; } }
+  .kicker { margin: 0; font-size: 13px; color: var(--accent); font-weight: 600; }
+  .parts { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); }
+  .part, .matter { background: var(--surface); border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 0.5px var(--hair); }
+  .part > img { width: 100%; aspect-ratio: 3 / 1.3; object-fit: cover; opacity: var(--art-opacity); }
+  @media (max-width: 600px) { .part > img { aspect-ratio: 3 / 1.15; } }
+  .part-body, .matter { padding: 16px 20px 18px; }
+  .part h3, .matter h3 { font-size: 21px; margin-top: 2px; }
+  .part h3 .alt, .matter h3 .alt { font-size: 14px; margin-top: 2px; }
+  .part ol, .matter ol { list-style: none; padding: 0; margin: 12px 0 0; font-size: 14.5px; }
+  .part li, .matter li { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 8px; align-items: baseline; padding: 7px 0; border-top: 0.5px solid var(--hair); line-height: 1.5; }
+  .matter { margin-top: 18px; }
+  @media (min-width: 760px) { .matter ol { columns: 2; column-gap: 28px; } .matter li { break-inside: avoid; } }
+  .lbl { color: var(--ink3); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .badge { font-size: 11.5px; padding: 1px 8px; border-radius: 99px; white-space: nowrap; }
+  .badge.free { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .badge.peek { color: var(--ink3); box-shadow: inset 0 0 0 0.5px var(--hair); }
+
+  /* 价格 */
+  .pricing { padding: 104px 0 0; }
+  .plans { display: grid; gap: 18px; max-width: 920px; margin: 0 auto; }
+  @media (min-width: 820px) { .plans { grid-template-columns: 1fr 1fr; } }
+  .plan { background: var(--surface); border-radius: 24px; padding: 28px 26px; box-shadow: 0 0 0 0.5px var(--hair); }
+  .plan.full { box-shadow: 0 0 0 1.5px var(--accent), 0 30px 60px -40px rgba(40, 122, 126, .45); }
+  .plan h3 { font-size: 24px; }
+  .price { font-family: var(--serif); font-size: 40px; font-weight: 700; margin: 10px 0 0; line-height: 1.1; font-variant-numeric: lining-nums; }
+  .price small { display: block; font-family: var(--sans); font-size: 14px; font-weight: 400; color: var(--ink2); margin-top: 6px; }
+  .plan .ticks { font-size: 15.5px; }
+  .always { max-width: 920px; margin: 18px auto 0; font-size: 14.5px; color: var(--ink2); text-align: center; }
+
+  /* 问答 */
+  .faq { padding: 104px 0 0; }
+  .faq .list { max-width: 760px; margin: 0 auto; }
+  details { background: var(--surface); border-radius: 18px; padding: 2px 22px; margin: 10px 0; box-shadow: 0 0 0 0.5px var(--hair); }
+  summary { cursor: pointer; font-weight: 600; padding: 16px 0; }
+  details p { margin: 0 0 16px; color: var(--ink2); font-size: 15.5px; }
+  .more { text-align: center; margin: 20px 0 0; font-size: 15px; }
+
+  /* 收尾 */
+  .closing { padding: 112px 0 0; text-align: center; }
+  .closing img.icon { width: 96px; height: 96px; border-radius: 22px; margin: 0 auto 22px; box-shadow: 0 16px 30px -18px rgba(var(--shadow), .6); }
+  .closing .cta { justify-content: center; margin-top: 28px; }
+  footer { margin-top: 112px; padding: 28px 0 40px; border-top: 0.5px solid var(--hair); font-size: 13.5px; color: var(--ink3); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer a { color: var(--ink2); }
+  footer p { margin: 0; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="../apple-touch-icon.png" alt="" width="30" height="30"><span>The AI Encyclopedia</span></a>
+    <nav aria-label="Page"><a href="#read">Features</a><a href="#sample">Sample</a><a href="#contents">Contents</a><a href="#pricing">Free vs. Full</a><a href="https://teancum.me/aibook-support/">Support</a></nav>
+    <a class="lang" href="../" hreflang="zh-Hans" lang="zh-Hans" data-lang="zh">中文</a>
+    <span class="btn btn-primary soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Coming soon</span></span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow"><span>iPhone · iPad</span><span>English &amp; Chinese</span><span>Works offline</span></p>
+        <h1>The AI Encyclopedia</h1>
+        <p class="sub"><i class="alt" lang="zh-Hans">AI 百科全书</i></p>
+        <p class="tagline">From understanding and using to building and research</p>
+        <p class="lead"><span class="q">What is AI, really? Why does a language model sometimes say something wrong with full confidence? Can you work through attention by hand?</span><br>
+          A complete three-volume AI textbook, from understanding AI to training, evaluating, shipping and research, made into an app you can read, experiment with and practise in.</p>
+        <div class="cta">
+          <span class="btn btn-primary soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Coming soon to the App Store</span></span>
+          <a class="btn btn-ghost" href="#sample">Read a page</a>
+        </div>
+        <p class="fine"><b>Free to download</b>: read the preface, the appendices and Parts 1–2 (chapters 1–12) in full · one purchase unlocks the whole book · no ads, no account</p>
+      </div>
+      <div class="hero-visual art-only"><figure class="art"><img src="../img/hero-home.jpg" width="1200" height="800" alt="" decoding="async"></figure></div>
+    </div>
+  </section>
+
+  <section class="stats" aria-label="The book in numbers">
+    <div class="wrap"><ul>
+<li><b>72</b><span>chapters</span><i class="alt" lang="zh-Hans">章</i></li>
+<li><b>191</b><span>figures</span><i class="alt" lang="zh-Hans">幅图</i></li>
+<li><b>69</b><span>hands-on labs</span><i class="alt" lang="zh-Hans">个互动实验</i></li>
+<li><b>360</b><span>drills</span><i class="alt" lang="zh-Hans">道互动题</i></li>
+<li><b>12</b><span>scenarios</span><i class="alt" lang="zh-Hans">个情景模拟</i></li>
+<li><b>463</b><span>flashcards</span><i class="alt" lang="zh-Hans">张术语卡</i></li>
+    </ul></div>
+  </section>
+
+  <section class="feature" id="read">
+    <div class="wrap">
+      <div class="copy">
+        <span class="mark" aria-hidden="true">读</span>
+        <h2>Read in English, Chinese, or both<i class="alt" lang="zh-Hans">中文、英文，或者对照着读</i></h2>
+        <p>Three volumes, 12 parts and 72 chapters, plus a preface and Appendices A–E. Every paragraph is written in both English and Chinese: read them side by side or choose one, and in a single-language mode tap a paragraph to see the other. The interface switches between English and Chinese too.</p>
+        <ul class="ticks"><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Guided and Full modes: Guided folds long code, program output and big tables into a single line so you can follow the main thread</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>191 figures you can zoom full screen, typeset math, and wide tables that turn into cards on iPhone</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Tap a term for its definition; highlights, notes, bookmarks and find in page; paper, sepia and night themes</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>“Explain simply”: select a passage and an on-device model explains it another way (iOS 26 on supported devices; the text never leaves your device)</span></li></ul>
+      </div>
+      <figure class="art"><img src="../img/hero-map.jpg" width="1200" height="800" alt="" loading="lazy" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="feature flip copper" id="experiment">
+    <div class="wrap">
+      <div class="copy">
+        <span class="mark" aria-hidden="true">做</span>
+        <h2>Learn it by working it out<i class="alt" lang="zh-Hans">动手算一遍，才算真的懂</i></h2>
+        <p>69 interactive labs, at least one for every chapter, rebuild the book’s own examples and numbers: which sorts the same text messages better, keyword rules or naive Bayes; why gradient descent diverges when the learning rate is only slightly too high; and causal attention over three positions, worked out step by step.</p>
+        <ul class="ticks"><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Change the parameters, draw your own data, retrain, and watch the results move; every lab links to its chapters</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Neural network playground, 2-D diffusion, prompt-injection sandbox, GPU memory estimator and more</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>12 branching scenarios: play an analyst, an engineer or a product lead, read logs, chats and metrics, make the call and reach one of several endings</span></li></ul>
+      </div>
+      <figure class="art"><img src="../img/hero-labs.jpg" width="1200" height="800" alt="" loading="lazy" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="feature navy" id="practice">
+    <div class="wrap">
+      <div class="copy">
+        <span class="mark" aria-hidden="true">练</span>
+        <h2>Practise now, review later<i class="alt" lang="zh-Hans">读完练一练，过几天再复习</i></h2>
+        <p>Every chapter has a quiz and exercises. Drills you don’t get fully right come back the next day, and term and key-point cards are scheduled with spaced repetition.</p>
+        <ul class="ticks"><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>360 drills in six formats: order, match, sort, fill in, estimate, spot the error</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>A quiz for each of the 72 chapters (360 questions); 326 exercises with layered hints, worked answers and self-rating</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>463 term flashcards and 508 key-point cards</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>A knowledge map of how all 72 chapters build on each other; 4 reading routes and a 5-question diagnostic to find where to start</span></li></ul>
+      </div>
+      <figure class="art"><img src="../img/hero-practice.jpg" width="1200" height="800" alt="" loading="lazy" decoding="async"></figure>
+    </div>
+  </section>
+
+  <section class="arcade" id="arcade">
+    <div class="wrap">
+      <div class="card">
+        <div>
+          <span class="pill">The arcade is always free</span>
+          <h2>A minute a round, and the book sticks<i class="alt" lang="zh-Hans">一局一分钟，把书玩熟</i></h2>
+          <p>Term Rush, Fermi estimates and true-or-false quickfire, plus a fresh daily challenge. The terms come from the book’s glossary, every number in the 48 Fermi questions is stated in the text, and the true-or-false questions are adapted from the chapter quizzes.</p>
+          <p class="note">No purchase needed. Flashcards, key-point cards, search and the knowledge map are always free too.</p>
+        </div>
+        <figure class="art"><img src="../img/part-05.jpg" width="1200" height="800" alt="" loading="lazy" decoding="async"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sample" id="sample">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>A page from the book<i class="alt" lang="zh-Hans">先读一段</i></h2>
+        <p>Section 32.3 of Chapter 32, “Understanding the Transformer from Scratch”. In the app you can read it side by side or in one language, and tap an underlined term for its definition.</p>
+      </div>
+      <article class="page">
+        <p class="page-head"><span>Chapter 32 · Understanding the Transformer from Scratch</span><span class="latin">第 32 章</span></p>
+        <h3><span class="sec-num">32.3</span>By hand: causal attention over 3 positions<i class="alt" lang="zh-Hans">手算：3 个位置的因果注意力</i></h3>
+        <div class="pair blk-quote"><div class="first" lang="en"><blockquote><p>with q = k = (1, 2, 3) and values (10, 20, 30), the three outputs under a <span class="term">causal mask</span> are 10, 18.81 and 29.48.</p></blockquote></div><div class="second" lang="zh-Hans"><blockquote><p>q = k = (1, 2, 3)，值 (10, 20, 30)，<span class="term">因果掩码</span>下三个位置的输出是 10、18.81、29.48。</p></blockquote></div></div><div class="pair blk-p"><div class="first" lang="en"><p>One dimension, no scaling needed (√1 = 1):</p></div><div class="second" lang="zh-Hans"><p>一维、不需要缩放（√1 = 1）：</p></div></div><div class="pair blk-list"><div class="first" lang="en"><ul><li>position 1 sees only itself: weight [1], output 10;</li><li>position 2: scores 2×1 = 2, 2×2 = 4, softmax → 0.119, 0.881, output 0.119×10 + 0.881×20 = 18.81;</li><li>position 3: scores 3, 6, 9, softmax → 0.002, 0.047, 0.950, output about 29.48.</li></ul></div><div class="second" lang="zh-Hans"><ul><li>位置 1 只能看自己：权重 [1]，输出 10；</li><li>位置 2：分数 2×1 = 2、2×2 = 4，softmax → 0.119、0.881，输出 0.119×10 + 0.881×20 = 18.81；</li><li>位置 3：分数 3、6、9，softmax → 0.002、0.047、0.950，输出约 29.48。</li></ul></div></div>
+        <figure class="figure">
+          <div class="figure-img"><img src="../img/plate-attention.jpg" width="1100" height="733" alt="Causal attention at position 3 reads positions 1–3, excluding future Token 4. Query–key scores determine weights over values. Keys and softmax are omitted here; arrows show permitted information flow only." loading="lazy" decoding="async"></div>
+          <figcaption>Causal attention at position 3 reads positions 1–3, excluding future Token 4. Query–key scores determine weights over values. Keys and softmax are omitted here; arrows show permitted information flow only.<i class="alt" lang="zh-Hans">位置 3 的因果注意力只能读取位置 1–3，不能读取未来的 Token 4。查询与各键决定权重，再对值加权；本图省略键和 softmax，只示意允许的信息流。</i></figcaption>
+        </figure>
+      </article>
+      <p class="lab-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6.5L4.6 18.4A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.4-2.6L14 9.5V3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span><b>This chapter’s lab · Causal attention by hand</b><br>Work the book&#x27;s 3-position example step by step — scores, causal mask, row-wise softmax, weighted sum — to get 10, 18.81 and 29.48; then edit the values or remove the mask.</span></p>
+    </div>
+  </section>
+
+  <section class="toc" id="contents">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Contents<i class="alt" lang="zh-Hans">目录</i></h2>
+        <p>Three volumes, 12 parts and 72 chapters, plus front matter and appendices. The preface, the appendices and Parts 1–2 are free in full; every other chapter has a free preview of its opening and first section.</p>
+        <p class="legend"><span><span class="badge free">Free</span> free in full</span><span><span class="badge peek">Preview</span> opening and first section free</span></p>
+      </div>
+      <article class="matter">
+        <p class="kicker">Before you start</p>
+        <h3>Front matter<i class="alt" lang="zh-Hans">前言</i></h3>
+        <ol><li><span class="lbl">1</span><span class="t">Before You Begin</span><span class="badge free">Free</span></li><li><span class="lbl">2</span><span class="t">Contents</span><span class="badge free">Free</span></li><li><span class="lbl">3</span><span class="t">Knowledge Maps</span><span class="badge free">Free</span></li><li><span class="lbl">4</span><span class="t">Reading Routes and Projects</span><span class="badge free">Free</span></li><li><span class="lbl">5</span><span class="t">Writing Spec and Stable IDs</span><span class="badge free">Free</span></li></ol>
+      </article>
+      <div class="volume">
+        <header class="vol-head">
+          <img src="../img/cover-1.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+          <div>
+            <p class="kicker">Volume I</p>
+            <h3>Understanding, Using and Foundations<i class="alt" lang="zh-Hans">理解、使用与基础</i></h3>
+            <p class="range">Parts 1–4 · Chapters 1–24</p>
+          </div>
+        </header>
+        <div class="parts">
+          <article class="part">
+            <img src="../img/part-01.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 1 · Chapters 1–6</p>
+              <h3>Understanding AI<i class="alt" lang="zh-Hans">认识人工智能</i></h3>
+              <ol><li><span class="lbl">1</span><span class="t">What AI Really Is</span><span class="badge free">Free</span></li><li><span class="lbl">2</span><span class="t">How AI Got Here</span><span class="badge free">Free</span></li><li><span class="lbl">3</span><span class="t">Data, Algorithms, Models and Compute</span><span class="badge free">Free</span></li><li><span class="lbl">4</span><span class="t">Training, Inference and Reasoning</span><span class="badge free">Free</span></li><li><span class="lbl">5</span><span class="t">What AI Can Do and Why It Fails</span><span class="badge free">Free</span></li><li><span class="lbl">6</span><span class="t">Knowledge Map and Learning Routes</span><span class="badge free">Free</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-02.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 2 · Chapters 7–12</p>
+              <h3>Using AI for Real Tasks<i class="alt" lang="zh-Hans">使用 AI 完成真实任务</i></h3>
+              <ol><li><span class="lbl">7</span><span class="t">Turning a Problem into a Task</span><span class="badge free">Free</span></li><li><span class="lbl">8</span><span class="t">Prompts and Context</span><span class="badge free">Free</span></li><li><span class="lbl">9</span><span class="t">Search, Research and Fact-Checking</span><span class="badge free">Free</span></li><li><span class="lbl">10</span><span class="t">Documents, Spreadsheets and Data Analysis</span><span class="badge free">Free</span></li><li><span class="lbl">11</span><span class="t">AI-Assisted Programming</span><span class="badge free">Free</span></li><li><span class="lbl">12</span><span class="t">Workflows and Human–AI Division of Labour</span><span class="badge free">Free</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-03.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 3 · Chapters 13–18</p>
+              <h3>Math, Programming and Data Foundations<i class="alt" lang="zh-Hans">数学、编程与数据基础</i></h3>
+              <ol><li><span class="lbl">13</span><span class="t">Python from Scratch</span><span class="badge peek">Preview</span></li><li><span class="lbl">14</span><span class="t">Vectors, Matrices and Tensors</span><span class="badge peek">Preview</span></li><li><span class="lbl">15</span><span class="t">Functions, Derivatives and Optimisation</span><span class="badge peek">Preview</span></li><li><span class="lbl">16</span><span class="t">Probability, Statistics and Information</span><span class="badge peek">Preview</span></li><li><span class="lbl">17</span><span class="t">Data Processing and Experimental Datasets</span><span class="badge peek">Preview</span></li><li><span class="lbl">18</span><span class="t">Search, Logic and Planning Basics</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-04.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 4 · Chapters 19–24</p>
+              <h3>The Complete Machine Learning Method<i class="alt" lang="zh-Hans">机器学习的完整方法</i></h3>
+              <ol><li><span class="lbl">19</span><span class="t">Regression, Classification and Generalisation</span><span class="badge peek">Preview</span></li><li><span class="lbl">20</span><span class="t">Trees, Ensembles and Support Vector Machines</span><span class="badge peek">Preview</span></li><li><span class="lbl">21</span><span class="t">Clustering, Dimensionality Reduction and Anomaly Detection</span><span class="badge peek">Preview</span></li><li><span class="lbl">22</span><span class="t">Probabilistic Models and Causal Inference</span><span class="badge peek">Preview</span></li><li><span class="lbl">23</span><span class="t">Recommendation, Ranking and Time Series</span><span class="badge peek">Preview</span></li><li><span class="lbl">24</span><span class="t">A Machine Learning Project End to End</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="volume">
+        <header class="vol-head">
+          <img src="../img/cover-2.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+          <div>
+            <p class="kicker">Volume II</p>
+            <h3>Deep Learning, Large Models and Creation<i class="alt" lang="zh-Hans">深度学习、大模型与创作</i></h3>
+            <p class="range">Parts 5–8 · Chapters 25–48</p>
+          </div>
+        </header>
+        <div class="parts">
+          <article class="part">
+            <img src="../img/part-05.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 5 · Chapters 25–30</p>
+              <h3>Deep Learning and Reinforcement Learning<i class="alt" lang="zh-Hans">深度学习与强化学习</i></h3>
+              <ol><li><span class="lbl">25</span><span class="t">Why Neural Networks Can Learn</span><span class="badge peek">Preview</span></li><li><span class="lbl">26</span><span class="t">Backpropagation and Automatic Differentiation</span><span class="badge peek">Preview</span></li><li><span class="lbl">27</span><span class="t">Making Training Reliable</span><span class="badge peek">Preview</span></li><li><span class="lbl">28</span><span class="t">Computer Vision and CNNs</span><span class="badge peek">Preview</span></li><li><span class="lbl">29</span><span class="t">Sequences and Representation Learning</span><span class="badge peek">Preview</span></li><li><span class="lbl">30</span><span class="t">Reinforcement Learning Basics</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-06.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 6 · Chapters 31–36</p>
+              <h3>Large Language Models<i class="alt" lang="zh-Hans">大语言模型</i></h3>
+              <ol><li><span class="lbl">31</span><span class="t">How Text Becomes Tokens</span><span class="badge peek">Preview</span></li><li><span class="lbl">32</span><span class="t">Understanding the Transformer from Scratch</span><span class="badge peek">Preview</span></li><li><span class="lbl">33</span><span class="t">What Modern Models Are Made Of</span><span class="badge peek">Preview</span></li><li><span class="lbl">34</span><span class="t">Pretraining and Data Mixtures</span><span class="badge peek">Preview</span></li><li><span class="lbl">35</span><span class="t">Generation, Reasoning and Test-Time Compute</span><span class="badge peek">Preview</span></li><li><span class="lbl">36</span><span class="t">How Language Models Are Evaluated</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-07.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 7 · Chapters 37–42</p>
+              <h3>Images, Sound, Video and Embodied AI<i class="alt" lang="zh-Hans">图像、声音、视频与具身智能</i></h3>
+              <ol><li><span class="lbl">37</span><span class="t">The Family of Generative Models</span><span class="badge peek">Preview</span></li><li><span class="lbl">38</span><span class="t">How Image Generation and Editing Work</span><span class="badge peek">Preview</span></li><li><span class="lbl">39</span><span class="t">Speech, Music and Sound Models</span><span class="badge peek">Preview</span></li><li><span class="lbl">40</span><span class="t">Video Generation and Temporal Understanding</span><span class="badge peek">Preview</span></li><li><span class="lbl">41</span><span class="t">Vision-Language and Multimodal Understanding</span><span class="badge peek">Preview</span></li><li><span class="lbl">42</span><span class="t">3D, Robotics and World Models</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-08.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 8 · Chapters 43–48</p>
+              <h3>Creating Deliverable Work with AI<i class="alt" lang="zh-Hans">用 AI 创作可交付作品</i></h3>
+              <ol><li><span class="lbl">43</span><span class="t">Writing and Knowledge Expression</span><span class="badge peek">Preview</span></li><li><span class="lbl">44</span><span class="t">Images, Design and Brand</span><span class="badge peek">Preview</span></li><li><span class="lbl">45</span><span class="t">Film and Animation Pipeline</span><span class="badge peek">Preview</span></li><li><span class="lbl">46</span><span class="t">Sound and Music Production</span><span class="badge peek">Preview</span></li><li><span class="lbl">47</span><span class="t">Games, Web and Interactive Work</span><span class="badge peek">Preview</span></li><li><span class="lbl">48</span><span class="t">A Complete Creative Project</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="volume">
+        <header class="vol-head">
+          <img src="../img/cover-3.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+          <div>
+            <p class="kicker">Volume III</p>
+            <h3>Applications, Systems, Products and Research<i class="alt" lang="zh-Hans">应用、系统、产品与研究</i></h3>
+            <p class="range">Parts 9–12 · Chapters 49–72</p>
+          </div>
+        </header>
+        <div class="parts">
+          <article class="part">
+            <img src="../img/part-09.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 9 · Chapters 49–54</p>
+              <h3>AI Applications and Agents<i class="alt" lang="zh-Hans">AI 应用与智能体</i></h3>
+              <ol><li><span class="lbl">49</span><span class="t">APIs and Tool Calling</span><span class="badge peek">Preview</span></li><li><span class="lbl">50</span><span class="t">RAG: From Documents to Grounded Answers</span><span class="badge peek">Preview</span></li><li><span class="lbl">51</span><span class="t">How Agents Run</span><span class="badge peek">Preview</span></li><li><span class="lbl">52</span><span class="t">Tool Ecosystems and Protocols</span><span class="badge peek">Preview</span></li><li><span class="lbl">53</span><span class="t">Evaluating Applications and Agents</span><span class="badge peek">Preview</span></li><li><span class="lbl">54</span><span class="t">A Complete AI Application Project</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-10.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 10 · Chapters 55–60</p>
+              <h3>Model Training and Systems Engineering<i class="alt" lang="zh-Hans">模型训练与系统工程</i></h3>
+              <ol><li><span class="lbl">55</span><span class="t">Data Engineering</span><span class="badge peek">Preview</span></li><li><span class="lbl">56</span><span class="t">SFT, LoRA and Distillation</span><span class="badge peek">Preview</span></li><li><span class="lbl">57</span><span class="t">Preference Optimisation and Reasoning RL</span><span class="badge peek">Preview</span></li><li><span class="lbl">58</span><span class="t">Distributed Training</span><span class="badge peek">Preview</span></li><li><span class="lbl">59</span><span class="t">Efficient Inference and On-Device Running</span><span class="badge peek">Preview</span></li><li><span class="lbl">60</span><span class="t">Performance Measurement and System Optimisation</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-11.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 11 · Chapters 61–66</p>
+              <h3>Real Products, Reliability and Social Responsibility<i class="alt" lang="zh-Hans">真实产品、可靠性与社会责任</i></h3>
+              <ol><li><span class="lbl">61</span><span class="t">Finding a Problem Worth Solving</span><span class="badge peek">Preview</span></li><li><span class="lbl">62</span><span class="t">AI Product Experience</span><span class="badge peek">Preview</span></li><li><span class="lbl">63</span><span class="t">Evaluation and Experiment Methods</span><span class="badge peek">Preview</span></li><li><span class="lbl">64</span><span class="t">Running in Production</span><span class="badge peek">Preview</span></li><li><span class="lbl">65</span><span class="t">Security, Privacy and Governance</span><span class="badge peek">Preview</span></li><li><span class="lbl">66</span><span class="t">AI and Society</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+          <article class="part">
+            <img src="../img/part-12.jpg" width="720" height="480" alt="" loading="lazy" decoding="async">
+            <div class="part-body">
+              <p class="kicker">Part 12 · Chapters 67–72</p>
+              <h3>Specialisation and Research<i class="alt" lang="zh-Hans">专精与研究</i></h3>
+              <ol><li><span class="lbl">67</span><span class="t">Reading Papers and Building Evidence Maps</span><span class="badge peek">Preview</span></li><li><span class="lbl">68</span><span class="t">Reproducing a Specific Result</span><span class="badge peek">Preview</span></li><li><span class="lbl">69</span><span class="t">Ablations and Error Analysis</span><span class="badge peek">Preview</span></li><li><span class="lbl">70</span><span class="t">Choosing a Specialisation</span><span class="badge peek">Preview</span></li><li><span class="lbl">71</span><span class="t">Asking and Testing New Questions</span><span class="badge peek">Preview</span></li><li><span class="lbl">72</span><span class="t">Capstone Project and External Review</span><span class="badge peek">Preview</span></li></ol>
+            </div>
+          </article>
+        </div>
+      </div>
+      <article class="matter">
+        <p class="kicker">Appendices</p>
+        <h3>Appendices A–E<i class="alt" lang="zh-Hans">附录 A–E</i></h3>
+        <ol><li><span class="lbl">A</span><span class="t">Fast-changing facts (dated)</span><span class="badge free">Free</span></li><li><span class="lbl">B</span><span class="t">Career supplement: where the interview book&#x27;s 114 questions went</span><span class="badge free">Free</span></li><li><span class="lbl">C</span><span class="t">Glossary</span><span class="badge free">Free</span></li><li><span class="lbl">D</span><span class="t">Entry ID Register</span><span class="badge free">Free</span></li><li><span class="lbl">E</span><span class="t">Source Register</span><span class="badge free">Free</span></li></ol>
+      </article>
+    </div>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Start free, buy once<i class="alt" lang="zh-Hans">先读，再决定</i></h2>
+        <p>The download is free. If it’s useful to you, buy the whole book once. It’s not a subscription and never renews.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <h3>Free sample</h3>
+          <p class="price">$0<small>Start reading right after you download, no account needed</small></p>
+          <ul class="ticks"><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>The front matter (5 sections) and Appendices A–E in full</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Parts 1–2 in full: “Understanding AI” and “Using AI for Real Tasks” (chapters 1–12)</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>The other 60 chapters: the opening and first section of each</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>21 labs: all 11 from chapters 1–12, plus one from each of parts 3–12 (gradient descent and the learning rate, bias and variance, neural network playground, causal attention by hand, 2-D diffusion, revision tracker, RAG, GPU memory estimator, prompt-injection sandbox, reproducing a number from a classic paper)</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Practice for chapters 1–12: 48 exercises, 12 chapter quizzes and 60 drills</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>2 scenarios: “The 97% Slip Reader” and “A Thousand Tickets”</span></li></ul>
+        </div>
+        <div class="plan full">
+          <h3>Full Book</h3>
+          <p class="price">$6.99<small>One-time purchase, not a subscription · local prices as shown in the App Store</small></p>
+          <ul class="ticks"><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>The whole book: three volumes, 72 chapters, front matter and appendices</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>All 69 interactive labs and 12 scenarios</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>All 360 drills, 72 chapter quizzes and 326 exercises</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Works on every iPhone and iPad with the same Apple Account, with Family Sharing</span></li><li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Restore Purchases on a new device without paying again</span></li></ul>
+        </div>
+      </div>
+      <p class="always">Always free: the arcade (Term Rush, Fermi estimates, true-or-false quickfire, daily challenge), the glossary and 463 term flashcards, 508 key-point cards, full-text search, the knowledge map and 4 reading routes, bookmarks / highlights / notes, progress tracking and data export.</p>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="wrap">
+      <div class="section-head"><h2>Questions<i class="alt" lang="zh-Hans">常见问题</i></h2></div>
+      <div class="list">
+        <details><summary>What do I need?</summary><p>An iPhone or iPad running iOS / iPadOS 18 or later. “Explain simply” uses Apple’s on-device model and needs iOS 26 on a device that supports Apple Intelligence; everything else works without it.</p></details>
+        <details><summary>Can I change the language?</summary><p>Yes. In Me → Settings → Language, choose English or Chinese for the interface, and English, Chinese or side by side for the book text. You can also switch from the reader’s toolbar at any time.</p></details>
+        <details><summary>Do I need to know how to code?</summary><p>No. Part 1 needs no code, and Part 2 is about using AI for real tasks such as research, fact-checking and working with documents and spreadsheets; Part 3, “Math, Programming and Data Foundations”, then starts from scratch with Chapter 13, “Python from Scratch”. The book’s 4 reading routes and 5-question diagnostic help you find where to start.</p></details>
+        <details><summary>Do I need to be online or sign up?</summary><p>No. Everything is inside the app and works offline, with no ads. Your progress, notes and practice records stay on your device, and you can export them from Me → Settings → Data. We collect no data.</p></details>
+        <details><summary>AI moves fast. Will the book go out of date?</summary><p>The main text sticks to principles and how to judge. Facts that change within months, such as prices, model names and platform parameters, are collected in Appendix A, “Fast-changing facts (dated)”, each with the date it was checked.</p></details>
+        <details><summary>I got a new phone. Do I keep the Full Book?</summary><p>Yes. Open Me → Settings → Full Book → Restore Purchases while signed in with the Apple Account you bought it with; you won’t be charged again. Members of your Family Sharing group can use it too.</p></details>
+      </div>
+      <p class="more">More answers on the <a href="https://teancum.me/aibook-support/">support page</a>, or email <a href="mailto:dongxiyunei@gmail.com">dongxiyunei@gmail.com</a></p>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <img class="icon" src="../icon-192.png" width="96" height="96" alt="The AI Encyclopedia app icon" loading="lazy">
+      <h2>A whole AI textbook in your pocket<i class="alt" lang="zh-Hans">把一整套 AI 教材装进口袋</i></h2>
+      <div class="cta">
+        <span class="btn btn-primary soon" aria-disabled="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.9zM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg><span>Coming soon to the App Store</span></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 TeancumTian · Company and product names in the book are used for illustration and belong to their owners</p>
+    <nav aria-label="Footer"><a href="https://teancum.me/aibook-support/">Support</a><a href="https://teancum.me/aibook-support/privacy.html">Privacy</a><a href="https://teancum.me/aibook-support/terms.html">Terms</a><a href="mailto:dongxiyunei@gmail.com">Contact</a></nav>
+  </div>
+</footer>
+
+<script>
+  // 顶栏滚动后加一条细线
+  const bar = document.getElementById('bar');
+  addEventListener('scroll', () => bar.classList.toggle('scrolled', scrollY > 8), { passive: true });
+  // 手动切语言：记下来，下次打开不再按系统语言跳
+  document.querySelectorAll('[data-lang]').forEach(a => a.addEventListener('click', () => {
+    try { localStorage.setItem('aibook.lang', a.dataset.lang); } catch (e) {}
+  }));
+</script>
+</body>
+</html>
